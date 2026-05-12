@@ -20,7 +20,6 @@ public class OrganizacionFactoryImpl implements IOrganizacionFactory {
         org.setTelefono(dto.getTelefono());
         org.setEmail(dto.getEmail());
 
-        // Tu lógica original de validación intacta y protegida
         if (dto.getTipo() != null) {
             switch (dto.getTipo().toUpperCase()) {
                 case "VETERINARIA":

@@ -76,9 +76,6 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
         kafkaProducer.enviarEventoRegistro("ORGANIZACION_ELIMINADA: " + organizacion.getNombre());
     }
 
-    // =========================================================================
-    // MÉTODOS FALLBACK (Ya no darán error porque OrganizacionDTO tendrá setId)
-    // =========================================================================
 
     public OrganizacionDTO metodoFallback(OrganizacionDTO dto, Throwable t) {
         System.err.println("El Circuit Breaker se ha activado al registrar debido a: " + t.getMessage());
