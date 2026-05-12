@@ -1,9 +1,7 @@
 package com.sanosysalvos.organizaciones.controller;
 
 import com.sanosysalvos.organizaciones.dto.OrganizacionDTO;
-import com.sanosysalvos.organizaciones.model.Organizacion;
-import com.sanosysalvos.organizaciones.service.OrganizacionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sanosysalvos.organizaciones.service.IOrganizacionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +12,15 @@ import java.util.List;
 @RequestMapping("/api/organizaciones")
 public class OrganizacionController {
 
-    @Autowired
-    private OrganizacionService service;
+    private final IOrganizacionService service;
+
+    public OrganizacionController(IOrganizacionService service) {
+        this.service = service;
+    }
 
     @PostMapping("/crear")
-    public ResponseEntity<Organizacion> registrarOrganizacion(@RequestBody OrganizacionDTO dto) {
-        Organizacion registrada = service.registrar(dto);
+    public ResponseEntity<OrganizacionDTO> registrarOrganizacion(@RequestBody OrganizacionDTO dto) {
+        OrganizacionDTO registrada = service.guardar(dto);
 
         if (registrada.getId() != null && registrada.getId() == -1L) {
             return new ResponseEntity<>(registrada, HttpStatus.SERVICE_UNAVAILABLE);
@@ -28,27 +29,29 @@ public class OrganizacionController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Organizacion>> listarTodas() {
-        List<Organizacion> lista = service.obtenerTodas();
+    public ResponseEntity<List<OrganizacionDTO>> listarTodas() {
+        List<OrganizacionDTO> lista = service.obtenerTodas();
         return new ResponseEntity<>(lista, HttpStatus.OK);
     }
 
     @GetMapping("/buscar/{id}")
-    public ResponseEntity<Organizacion> buscarPorId(@PathVariable Long id) {
-        return service.obtenerPorId(id)
-                .map(org -> {
-                    if (org.getId() != null && org.getId() == -1L) {
-                        return new ResponseEntity<>(org, HttpStatus.SERVICE_UNAVAILABLE);
-                    }
-                    return new ResponseEntity<>(org, HttpStatus.OK);
-                })
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<OrganizacionDTO> buscarPorId(@PathVariable Long id) {
+        try {
+            OrganizacionDTO org = service.obtenerPorId(id);
+
+            if (org.getId() != null && org.getId() == -1L) {
+                return new ResponseEntity<>(org, HttpStatus.SERVICE_UNAVAILABLE);
+            }
+            return new ResponseEntity<>(org, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizarOrganizacion(@PathVariable Long id, @RequestBody OrganizacionDTO dto) {
         try {
-            Organizacion actualizada = service.actualizar(id, dto);
+            OrganizacionDTO actualizada = service.actualizar(id, dto);
             if (actualizada.getId() != null && actualizada.getId() == -1L) {
                 return new ResponseEntity<>(actualizada, HttpStatus.SERVICE_UNAVAILABLE);
             }
