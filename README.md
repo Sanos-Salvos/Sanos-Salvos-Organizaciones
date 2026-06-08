@@ -1,36 +1,33 @@
-﻿# 🏥 Sanos-Salvos-Organizaciones
+﻿# Sanos-Salvos-Organizaciones
 
 Microservicio de fundaciones y organizaciones
 
 ## Puerto
-\\\
+
 8081
-\\\
 
 ## Base de datos
-\\\
+
 organizaciones_db
-\\\
 
-## Endpoints
-\\\
-/api/organizaciones
-\\\
+## Endpoints disponibles
 
-## Ejecución
+GET /api/organizaciones
+POST /api/organizaciones
+GET /api/organizaciones/{id}
 
-### Docker
-\\\ash
+## Ejecucion con Docker
+
 docker-compose up --build
-\\\
 
-### Manual
-\\\ash
+## Ejecucion manual
+
 mvn spring-boot:run
-\\\
 
-## Stack
+## Tecnologias
+
 - Java 21
 - Spring Boot 3.2
+- Spring Security + JWT
 - PostgreSQL
 - Docker
