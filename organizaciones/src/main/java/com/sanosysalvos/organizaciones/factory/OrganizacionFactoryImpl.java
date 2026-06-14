@@ -21,19 +21,13 @@ public class OrganizacionFactoryImpl implements IOrganizacionFactory {
         org.setEmail(dto.getEmail());
 
         if (dto.getTipo() != null) {
-            switch (dto.getTipo().toUpperCase()) {
-                case "VETERINARIA":
-                    org.setTipo("Veterinaria");
-                    break;
-                case "REFUGIO":
-                    org.setTipo("Refugio");
-                    break;
-                case "MUNICIPALIDAD":
-                    org.setTipo("Municipalidad");
-                    break;
-                default:
-                    throw new IllegalArgumentException("Tipo de organización no válido: " + dto.getTipo());
-            }
+            String tipoFormateado = switch (dto.getTipo().toUpperCase()) {
+                case "VETERINARIA" -> "Veterinaria";
+                case "REFUGIO" -> "Refugio";
+                case "MUNICIPALIDAD" -> "Municipalidad";
+                default -> throw new IllegalArgumentException("Tipo de organización no válido: " + dto.getTipo());
+            };
+            org.setTipo(tipoFormateado);
         } else {
             throw new IllegalArgumentException("El tipo de organización no puede ser nulo");
         }
