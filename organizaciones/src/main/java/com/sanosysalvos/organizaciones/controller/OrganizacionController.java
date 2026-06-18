@@ -2,6 +2,7 @@ package com.sanosysalvos.organizaciones.controller;
 
 import com.sanosysalvos.organizaciones.dto.OrganizacionDTO;
 import com.sanosysalvos.organizaciones.service.IOrganizacionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class OrganizacionController {
     }
 
     @PostMapping
-    public ResponseEntity<OrganizacionDTO> registrarOrganizacion(@RequestBody OrganizacionDTO dto) {
+    public ResponseEntity<OrganizacionDTO> registrarOrganizacion(@Valid @RequestBody OrganizacionDTO dto) {
         OrganizacionDTO registrada = service.guardar(dto);
         return new ResponseEntity<>(registrada, HttpStatus.CREATED);
     }
@@ -38,7 +39,7 @@ public class OrganizacionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrganizacionDTO> actualizarOrganizacion(@PathVariable Long id, @RequestBody OrganizacionDTO dto) {
+    public ResponseEntity<OrganizacionDTO> actualizarOrganizacion(@PathVariable Long id, @Valid @RequestBody OrganizacionDTO dto) {
         OrganizacionDTO actualizada = service.actualizar(id, dto);
         return ResponseEntity.ok(actualizada);
     }
